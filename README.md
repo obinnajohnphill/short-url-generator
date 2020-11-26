@@ -28,6 +28,11 @@ CREATE TABLE `short_urls` (
   
 - Navigate to your host domain to view/interact with the shortcode application
 
+###### Important Note!!
+- To test hit counter, you must refresh the page after you have clicked the short url and navigated back to the application view.
+- You should see the hit counter increment on each click.
+  
+
 ###### Application Screenshot
 ![Screenshot](screenshot.png)
 
