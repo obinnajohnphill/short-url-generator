@@ -27,6 +27,7 @@ $data = new ShortURL(new Database());
 <div class="container">
     <div class="jumbotron">
         <h6>Application to convert long URL into a short version</h6><br/>
+        <h6>Click on the short url link to redirect url or click on 'Del' button to delete url</h6><br/>
     </div>
     <div class="row">
         <div class="col-sm-6" style="background-color:lavender;">
