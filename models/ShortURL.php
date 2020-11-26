@@ -97,7 +97,9 @@ class ShortURL
             $result = $stmt->get_result();
             $data = array();
             while ($row = $result->fetch_assoc()) {
-                $data[] = array("long_url" => $row['long_url'], "short_url" => $row['short_code']);
+                $data[] = array("long_url" => $row['long_url'],
+                                "short_url" => $row['short_code'],
+                                "hits" => $row['hits']);
             }
             return $data;
         }
@@ -139,13 +141,10 @@ class ShortURL
                 $connection = $conn->getConnection();
 
                 // prepare and bind
-
-
-                $stmt = $connection->prepare("UPDATE  ".self::$table." SET  hits = ? WHERE id  = ? ");
-                $stmt->bind_param('ii', $id,$hits);
+                $stmt = $connection->prepare("UPDATE  ".self::$table." SET  hits = hits+1 WHERE id  = ? ");
+                $stmt->bind_param('i',$id);
 
                 // set parameters and execute
-                $hits = $hits+1 ;
                 $stmt->execute();
                 $stmt->close();
                 $connection->close();

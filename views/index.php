@@ -50,6 +50,7 @@ $data = new ShortURL(new Database());
                 <tr>
                     <th>Long URL</th>
                     <th>Short URL</th>
+                    <th>Short URL Hits</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,6 +59,7 @@ $data = new ShortURL(new Database());
                         echo "<tr>
                         <td>" . $url['long_url'] . "</td>
                         <td><a href='/redirect?code=" . $url['short_url'] . "'>" . $url['short_url'] . "</a></td>
+                         <td>" .$url['hits']. "</td>
                     </tr>";
                     }
                     }else {

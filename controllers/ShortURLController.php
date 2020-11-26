@@ -32,8 +32,7 @@ class ShortURLController extends ShortURL
         if($shortCode == false){
             $this->createShortCode($url);
         }
-        header("Location: /");
-        exit;
+        exit(header("Location: /"));
     }
 
     protected function validateUrlFormat($url){
