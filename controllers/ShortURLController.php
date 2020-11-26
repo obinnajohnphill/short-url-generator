@@ -99,5 +99,7 @@ class ShortURLController extends ShortURL
         return preg_match("|[".$rawChars."]+|", $code);
     }
 
-
+    public function deleteUrlShortCode($short_code){
+        $this->deleteUrl($short_code);
+    }
 }

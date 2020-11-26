@@ -60,6 +60,7 @@ $data = new ShortURL(new Database());
                         <td>" . $url['long_url'] . "</td>
                         <td><a href='/redirect?code=" . $url['short_url'] . "'>" . $url['short_url'] . "</a></td>
                          <td>" .$url['hits']. "</td>
+                         <td><a href='/delete?code=" . $url['short_url'] . "'><button style='background-color: red; color:white'>Del</button></a></td>
                     </tr>";
                     }
                     }else {

@@ -19,6 +19,10 @@ Route::add('/redirect',function(){
     new RedirectURLController($_GET['code']);
 },'get');
 
+Route::add('/delete',function(){
+    require '../controllers/DeleteShortURLController.php';
+    new DeleteShortURLController($_GET['code']);
+},'get');
 
 Route::run('/');
 

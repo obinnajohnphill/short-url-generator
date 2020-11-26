@@ -152,7 +152,32 @@ class ShortURL
             catch(Exception $e) {
                 echo 'Message: ' .$e->getMessage();
             }
+    }
+
+
+    /**
+     *
+     * Deletes url record from database
+     *
+     * @param $short_code
+     * @return null
+     */
+    function deleteUrl($short_code)
+    {
+        try {
+            $sql = "DELETE FROM ".self::$table."  WHERE short_code=?";
+            $conn = new Database();
+            $connection = $conn->getConnection();
+            $stmt = $connection->prepare($sql);
+            $stmt->bind_param("s", $short_code);
+            $stmt->execute();
+            header("Location: /");
+            exit();
         }
+        catch(Exception $e) {
+            echo 'Message: ' .$e->getMessage();
+        }
+    }
 
 
 }
