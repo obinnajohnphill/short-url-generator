@@ -13,13 +13,12 @@ class ShortURL
     protected $long_url;
     protected $short_code;
     protected $created;
-    protected $hits;
     protected $id;
 
 
     /**
      *
-     * Instantiates database class
+     * Instantiates database connection class via dependency injection
      *
      * @param Database $database
      */
@@ -28,33 +27,13 @@ class ShortURL
         $this->database = $database;
     }
 
-
-    public function urlExistsInDB($url){
-        try {
-            $conn = new Database();
-            $connection = $conn->getConnection();
-            $query = "SELECT short_code FROM ".self::$table."   WHERE long_url=? LIMIT 1";
-            $stmt =  $connection->prepare($query);
-            if(!$stmt){
-                echo "Prepare statement failed: (".  $connection->errno.") ". $connection->error."<br>";
-            }
-            $stmt->bind_param("i", $person_id);
-            $stmt->execute();
-            $stmt->execute();
-            $result = $stmt->get_result();
-            if(isset($result) AND !empty($result)){
-                while ($row = $result->fetch_assoc()) {
-                    return $row["short_code"];
-                }
-            }else{
-                return false;
-            }
-        }
-        catch(Exception $e) {
-            echo 'Message: ' .$e->getMessage();
-        }
-    }
-
+    /**
+     * Inserts url record into database
+     *
+     * @param $url
+     * @param $code
+     * @return null
+     */
     public function insertUrlInDB($url, $code){
         try {
             $conn = new Database();
@@ -85,7 +64,11 @@ class ShortURL
 
 
 
-
+    /**
+     * Selects all url record from database
+     *
+     * @return null
+     */
     public function getUrlFromDB()
     {
         try {
@@ -109,6 +92,12 @@ class ShortURL
     }
 
 
+    /**
+     * Selects specific url url record from database
+     *
+     * @param $short_code
+     * @return null
+     */
     public function getSpecificUrl($short_code)
     {
         try {
@@ -130,9 +119,9 @@ class ShortURL
 
 
     /**
-     *
      * Update the hit-counter
      *
+     * @param $id
      * @return null
      */
     public function incrementCounter($id){
@@ -156,7 +145,6 @@ class ShortURL
 
 
     /**
-     *
      * Deletes url record from database
      *
      * @param $short_code

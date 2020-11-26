@@ -15,47 +15,52 @@ class ShortURLController extends ShortURL
         $this->timestamp = date("Y-m-d H:i:s");
     }
 
+    /**
+     * Call the validation methods and the create url short-code method
+     *
+     * @return null
+     */
     public function urlToShortCode($url){
-
         if(empty($url)){
             throw new Exception("No URL was supplied.");
         }
         if($this->validateUrlFormat($url) == false){
             throw new Exception("URL does not have a valid format.");
         }
-        if(self::$checkUrlExists){
-            if (!$this->verifyUrlExists($url)){
-                throw new Exception("URL does not appear to exist.");
-            }
-        }
-        $shortCode =  $this->urlExistsInDB($url);
-        if($shortCode == false){
-            $this->createShortCode($url);
-        }
+
+        $this->createShortCode($url);
+
         exit(header("Location: /"));
     }
 
+    /**
+     * Validates the url format
+     *
+     * @param $url
+     * @return string of url
+     */
     protected function validateUrlFormat($url){
         return filter_var($url, FILTER_VALIDATE_URL, FILTER_FLAG_HOST_REQUIRED);
     }
 
-    protected function verifyUrlExists($url){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_NOBODY, true);
-        curl_setopt($ch,  CURLOPT_RETURNTRANSFER, true);
-        curl_exec($ch);
-        $response = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-        return (!empty($response) && $response != 404);
-    }
-
+    /**
+     * Creates short-code and calls the insert url methos
+     *
+     * @param $url
+     * @return string of short code
+     */
     protected function createShortCode($url){
         $shortCode = $this->generateRandomString(self::$codeLength);
         $this->insertUrlInDB($url, $shortCode);
         return $shortCode;
     }
 
+    /**
+     * Generates the short url as random string
+     *
+     * @param int $length
+     * @return string or random type
+     */
     protected function generateRandomString($length = 6){
         $sets = explode('|', self::$chars);
         $all = '';
@@ -73,6 +78,12 @@ class ShortURLController extends ShortURL
     }
 
 
+    /**
+     * Calls the validates short url method and calls the increment hits method
+     *
+     * @return null
+     * @throws Exception
+     */
     public function shortCodeToUrl($code, $increment = true){
         if(empty($code)) {
             throw new Exception("No short code was supplied.");
@@ -94,11 +105,21 @@ class ShortURLController extends ShortURL
         return $urlRow["long_url"];
     }
 
+    /**
+     * Validate short url
+     *
+     * @return boolean true or false
+     */
     protected function validateShortCode($code){
         $rawChars = str_replace('|', '', self::$chars);
         return preg_match("|[".$rawChars."]+|", $code);
     }
 
+    /**
+     * Calls the delete url method
+     *
+     * @return null
+     */
     public function deleteUrlShortCode($short_code){
         $this->deleteUrl($short_code);
     }
